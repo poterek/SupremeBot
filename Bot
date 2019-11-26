@@ -1,0 +1,34 @@
+from config import keys
+from selenium import webdriver
+import time
+
+
+def order(k):
+
+    driver= webdriver.Chrome("./chromedriver")
+
+
+
+    driver.get(k['product_url']) #product url to "https://www.supremenewyork.com/shop/all"
+    driver.find_element_by_xpath('//*[@id="nav-categories"]/li[5]/a').click()
+    AElements=driver.find_elements_by_tag_name('a')
+    for el in AElements:  #elemeent który chce uzyskać to kolor pomiedzy tagami <a> i wcisnąc go niemam możliwosci inaczej wykonać tego polecenia poniewaz bazuje na nazwie produktu
+       if el.text == 'Magenta':
+           AElements.click()
+
+    time.sleep(0.5)
+    driver.find_element_by_xpath('//*[@id="cart"]/a[2]').click()
+    driver.find_element_by_xpath('//*[@id="order_billing_name"]').send_keys(k["name"])
+    driver.find_element_by_xpath('//*[@id="order_email"]').send_keys(k["email"])
+    driver.find_element_by_xpath('//*[@id="order_tel"]').send_keys(k["phone_number"])
+    driver.find_element_by_xpath('//*[@id="bo"]').send_keys(k["address"])
+    driver.find_element_by_xpath('//*[@id="order_billing_city"]').send_keys(k["city"])
+    driver.find_element_by_xpath('//*[@id="order_billing_zip"]').send_keys(k["code"])
+    driver.find_element_by_xpath('//*[@id="cnb"]').send_keys(k["card_number"])
+    driver.find_element_by_xpath('//*[@id="vval"]').send_keys(k["cvv_code"])
+    driver.find_element_by_xpath('//*[@id="order_billing_country"]/option[26]').click()
+    driver.find_element_by_xpath('// *[ @ id = "cart-cc"] / fieldset / p / label / div / ins').click()
+    driver.find_element_by_xpath('//*[@id="pay"]/input').click()
+
+if __name__ == "__main__":
+    order(keys)
